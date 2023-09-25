@@ -7,14 +7,14 @@ pipeline {
     stages{
         stage('Build Maven'){
             steps{
-                checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/sureshrajuvetukuri/devops-automation.git']]])
+               checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/anilreddy26/devops-automation.git']])
                 sh 'mvn clean install'
             }
         }
         stage('Build docker image'){
             steps{
                 script{
-                    sh 'docker build -t suresh394/kubernetes .'
+                    sh 'docker build -t anilreddy26/kubernetes .'
                 }
             }
         }
@@ -22,10 +22,10 @@ pipeline {
             steps{
                 script{
                     withCredentials([string(credentialsId: 'dockerhubpwd', variable: 'dockerhubpwd')]) {
-                    sh 'docker login -u suresh394 -p ${dockerhubpwd}'
+                    sh 'docker login -u anilreddy26 -p ${dockerhubpwd}'
                         
                     }
-                    sh 'docker push suresh394/kubernetes'
+                    sh 'docker push anilreddy26/kubernetes'
                 }
             }
         }
